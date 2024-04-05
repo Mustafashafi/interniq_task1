@@ -1,53 +1,55 @@
-import random
+class ATM:
+    def __init__(self, balance=0):
+        self.balance = balance
 
-def choose_word():
-    words = ["python", "hangman", "programming", "computer", "code", "challenge"]
-    return random.choice(words)
+    def check_balance(self):
+        return self.balance
 
-def display_word(word, guessed_letters):
-    display = ""
-    for letter in word:
-        if letter in guessed_letters:
-            display += letter
+    def deposit(self, amount):
+        if amount > 0:
+            self.balance += amount
+            return True
         else:
-            display += "_"
-    return display
+            return False
 
-def hangman():
-    max_attempts = 6
-    word_to_guess = choose_word()
-    guessed_letters = []
-    incorrect_attempts = 0
+    def withdraw(self, amount):
+        if 0 < amount <= self.balance:
+            self.balance -= amount
+            return True
+        else:
+            return False
 
-    print("Welcome to Hangman!")
-    print(display_word(word_to_guess, guessed_letters))
+def main():
+    atm = ATM(1000)
 
-    while incorrect_attempts < max_attempts:
-        guess = input("Guess a letter: ").lower()
+    while True:
+        print("\nWelcome to the ATM!")
+        print("1. Check Balance")
+        print("2. Deposit")
+        print("3. Withdraw")
+        print("4. Exit")
 
-        if len(guess) != 1 or not guess.isalpha():
-            print("Please enter a single letter.")
-            continue
+        choice = input("Enter your choice: ")
 
-        if guess in guessed_letters:
-            print("You've already guessed that letter. Try again.")
-            continue
-
-        guessed_letters.append(guess)
-
-        if guess not in word_to_guess:
-            incorrect_attempts += 1
-            print(f"Incorrect guess! {max_attempts - incorrect_attempts} attempts remaining.")
-
-        display = display_word(word_to_guess, guessed_letters)
-        print(display)
-
-        if "_" not in display:
-            print("Congratulations! You've guessed the word.")
+        if choice == "1":
+            print("Your balance is:", atm.check_balance())
+        elif choice == "2":
+            amount = float(input("Enter deposit amount: "))
+            if atm.deposit(amount):
+                print("Deposit successful.")
+            else:
+                print("Invalid deposit amount.")
+        elif choice == "3":
+            amount = float(input("Enter withdrawal amount: "))
+            if atm.withdraw(amount):
+                print("Withdrawal successful.")
+            else:
+                print("Insufficient funds or invalid withdrawal amount.")
+        elif choice == "4":
+            print("Thank you for using the ATM. Goodbye!")
             break
-
-    if "_" in display:
-        print(f"Sorry, you've run out of attempts. The word was: {word_to_guess}")
+        else:
+            print("Invalid choice. Please try again.")
 
 if __name__ == "__main__":
-    hangman()
+    main()
